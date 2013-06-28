@@ -5,3 +5,5 @@ For this reason I decided to implement this game on iOS platform using cocos2d-x
 超级六边形是安卓平台下面一款非常刺激的游戏。我非常喜欢它。
 但是在我的三星galaxy s4上面，它经常在我玩地正high的时候崩溃。
 由于这个原因我决定ios平台下面自己实现一个，使用cocos2d-x框架。
+
+cocos2d-x是一个可以跨平台的c++游戏框架，所以在这个项目稳定之后，如果有时间的话可以将它移植到android平台。
