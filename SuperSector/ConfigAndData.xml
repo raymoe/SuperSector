@@ -1,0 +1,112 @@
+<ConfigAndData>
+    <Config>
+    </Config>
+    
+    <Data>
+        <LevelData level="1">
+            <BarrierData>
+                
+                <BarrierGroup>
+                    <Barrier innerR="1.2" outerR="1.3" start="0" end="1" />
+                    <Barrier innerR="1.2" outerR="1.3" start="2" end="3" />
+                    <Barrier innerR="1.2" outerR="1.3" start="4" end="5" />
+                </BarrierGroup>
+                
+                <BarrierGroup>
+                    <Barrier innerR="1.2" outerR="1.3" start="0" end="2" />
+                    <Barrier innerR="1.2" outerR="1.3" start="3" end="5" />
+                </BarrierGroup>
+                
+                <BarrierGroup>
+                    <Barrier innerR="1.2" outerR="1.3" start="2" end="3" />
+                    <Barrier innerR="1.2" outerR="1.3" start="4" end="5" />
+                </BarrierGroup>
+                
+                <BarrierGroup>
+                    <Barrier innerR="1.2" outerR="1.3" start="1" end="2" />
+                </BarrierGroup>
+                
+                <BarrierGroup>
+                    <Barrier innerR="1.2" outerR="1.3" start="0" end="3" />
+                </BarrierGroup>
+                
+                <BarrierGroup>
+                    <Barrier innerR="1.2" outerR="1.3" start="2" end="5" />
+                </BarrierGroup>
+                
+                <BarrierGroup>
+                    <Barrier innerR="1.2" outerR="1.3" start="0" end="1" />
+                    <Barrier innerR="1.2" outerR="1.3" start="2" end="3" />
+                    <Barrier innerR="1.2" outerR="1.3" start="4" end="5" />
+                    <Barrier innerR="1.4" outerR="1.5" start="0" end="1" />
+                    <Barrier innerR="1.4" outerR="1.5" start="2" end="3" />
+                    <Barrier innerR="1.4" outerR="1.5" start="4" end="5" />
+                </BarrierGroup>
+                
+                <BarrierGroup>
+                    <Barrier innerR="1.2" outerR="1.3" start="0" end="1" />
+                </BarrierGroup>
+                
+                <BarrierGroup>
+                    <Barrier innerR="1.2" outerR="1.3" start="2" end="3" />
+                    
+                </BarrierGroup>
+            </BarrierData>
+        </LevelData>
+        
+        <LevelData level="2">
+            <BarrierData>
+                <BarrierGroup>
+                    <Barrier innerR="1" outerR="1.1" start="0" end="1" />
+                    <Barrier innerR="1" outerR="1.1" start="2" end="3" />
+                    <Barrier innerR="1" outerR="1.1" start="4" end="5" />
+                </BarrierGroup>
+                
+                <BarrierGroup>
+                    <Barrier innerR="1" outerR="1.1" start="0" end="1" />
+                    <Barrier innerR="1" outerR="1.1" start="2" end="3" />
+                    <Barrier innerR="1" outerR="1.1" start="4" end="5" />
+                    
+                    <Barrier innerR="1.2" outerR="1.3" start="1" end="2" />
+                    <Barrier innerR="1.2" outerR="1.3" start="3" end="4" />
+                    <Barrier innerR="1.2" outerR="1.3" start="5" end="6" />
+                </BarrierGroup>
+                
+            </BarrierData>
+        </LevelData>
+        
+        <LevelData level="3">
+            <BarrierData>
+                <BarrierGroup>
+                    <Barrier innerR="1" outerR="1.1" start="0" end="1" />
+                    <Barrier innerR="1" outerR="1.1" start="2" end="3" />
+                    <Barrier innerR="1" outerR="1.1" start="4" end="5" />
+                </BarrierGroup>
+                
+                <BarrierGroup>
+                    <Barrier innerR="1.2" outerR="1.3" start="1" end="2" />
+                    <Barrier innerR="1.2" outerR="1.3" start="3" end="4" />
+                    <Barrier innerR="1.2" outerR="1.3" start="5" end="6" />
+                </BarrierGroup>
+                
+            </BarrierData>
+        </LevelData>
+        
+        <LevelData level="4">
+            <BarrierData>
+                <BarrierGroup>
+                    <Barrier innerR="1" outerR="1.1" start="0" end="1" />
+                    <Barrier innerR="1" outerR="1.1" start="2" end="3" />
+                    <Barrier innerR="1" outerR="1.1" start="4" end="5" />
+                </BarrierGroup>
+                
+                <BarrierGroup>
+                    <Barrier innerR="1.2" outerR="1.3" start="1" end="2" />
+                    <Barrier innerR="1.2" outerR="1.3" start="3" end="4" />
+                    <Barrier innerR="1.2" outerR="1.3" start="5" end="6" />
+                </BarrierGroup>
+                
+            </BarrierData>
+        </LevelData>
+    </Data>
+</ConfigAndData>
