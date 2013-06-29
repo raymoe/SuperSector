@@ -7,10 +7,15 @@
 //
 
 #include "Actions.h"
+#include "Strategy.h"
+#include "GameScene.h"
 
 bool RandomRotateAction::init()
 {
-    return this->initWithAction(CCRotateBy::create(createRandomTime(),createRandomAngle()));
+    float time,speed;
+    time = GameScene::sharedInstance()->getGameStrategy()->getNextRandomTime();
+    speed = GameScene::sharedInstance()->getGameStrategy()->getNextRandomSpeed();
+    return this->initWithAction(CCRotateBy::create(time,time*speed));
 }
 
 void RandomRotateAction::step(float dt)
@@ -19,13 +24,11 @@ void RandomRotateAction::step(float dt)
     if (m_pInnerAction->isDone())
     {
         m_pInnerAction->release();
-        this->initWithAction(CCRotateBy::create(createRandomTime(),createRandomAngle()));
+        float time,speed;
+        time = GameScene::sharedInstance()->getGameStrategy()->getNextRandomTime();
+        speed = GameScene::sharedInstance()->getGameStrategy()->getNextRandomSpeed();
+        this->initWithAction(CCRotateBy::create(time,time*speed));
         m_pInnerAction->startWithTarget(m_pTarget);
-//        float diff = m_pInnerAction->getElapsed() - m_pInnerAction->getDuration();
-//        m_pInnerAction->startWithTarget(m_pTarget);
-//        // to prevent jerk. issue #390, 1247
-//        m_pInnerAction->step(0.0f);
-//        m_pInnerAction->step(diff);
     }
 
 }

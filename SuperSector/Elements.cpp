@@ -22,6 +22,7 @@ bool Sprite::init()
     _baseLength = 20;
     _height = 20;
     _isTouch = false;
+    
     return SpriteFather::init();
 }
 
@@ -31,6 +32,7 @@ bool Sprite::isClockwise()
         return false;
     return true;
 }
+
 void Sprite::draw()
 {
     ccDrawColor4F(1, 1, 1, 1);
@@ -38,11 +40,11 @@ void Sprite::draw()
     {
         if(isClockwise())
         {
-            _directAngle -= 8;
+            _directAngle -= 7;
         }
         else
         {
-            _directAngle += 8;
+            _directAngle += 7;
         }
     }
     float cx,cy,tx,ty,cl;
@@ -81,33 +83,57 @@ void Sprite::ccTouchEnded(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
     _isTouch = false;
 }
 
-void Sprite::updateTransform()
-{
-    
-}
-
-void SectorScene::setLevel(int level)
-{
-    
-}
 
 bool SectorScene::init()
 {
     CCSize size = CCDirector::sharedDirector()->getWinSize();
     this->setPosition(ccp(size.width/2,size.height/2));
     
-    SectorLayer* pLayer = SectorLayer::create();
-    this->addChild(pLayer);
+//    SectorLayer* pLayer = SectorLayer::create();
+//    this->addChild(pLayer);
     
+    //由于处理旋转，作此修改
+    CCNode* node = CCNode::create();
+    node->addChild(SectorLayer::create());
+    node->runAction(RandomRotateAction::create());
+    this->addChild(node);
 
-    
-    RandomRotateAction* action = RandomRotateAction::create();
-    this->runAction(action);
-    
     return CCScene::init();
 }
 
 void SectorScene::draw()
+{
+    int level = GameScene::sharedInstance()->getLevel();
+    if(level == 1)
+        GameScene::sharedInstance()->movedLength += 0.001;
+    if(level == 2)
+        GameScene::sharedInstance()->movedLength += 0.002;
+    if(level == 3)
+        GameScene::sharedInstance()->movedLength += 0.003;
+    if(level == 4)
+        GameScene::sharedInstance()->movedLength += 0.003;
+}
+
+void SectorLayer::scheduleFunc()
+{
+}
+
+bool SectorLayer::init()
+{
+    Sprite* s = Sprite::create();
+    this->addChild(s);
+    GameScene::sharedInstance()->setSprite(s);
+    
+    for(int i = 0; i<=2; i++)
+    {
+        this->addChild(BarrierGroup::create());
+    }
+   
+    this->schedule(schedule_selector(SectorLayer::scheduleFunc));
+    return SectorLayerFather::init();
+}
+
+void SectorLayer::draw()
 {
     float r = 0.1;
     CCSize size = CCDirector::sharedDirector()->getWinSize();
@@ -125,41 +151,6 @@ void SectorScene::draw()
         ccDrawLine(ccp(r*size.width/2*cos(i*M_PI/3),r*size.width/2*sin(i*M_PI/3)), ccp(l*cos(i*M_PI/3),l*sin(i*M_PI/3)));
     }
     glLineWidth(1);
-    
-    CCScene::draw();
-}
-
-void SectorLayer::scheduleFunc()
-{
-//    CCActionInterval *jump1 = CCJumpBy::create(4, ccp(0,0), 100, 4);
-//    CCActionInterval *jump2 = jump1->reverse();
-//    CCSequence* seq = CCSequence::create(jump2, jump1, NULL);
-    
-    
-    
-//    while (1) {
-//        sleep(3);
-//    }
-}
-
-bool SectorLayer::init()
-{
-    Sprite* s = Sprite::create();
-    this->addChild(s);
-    GameScene::sharedInstance()->setSprite(s);
-    
-    for(int i = 0; i<=1; i++)
-    {
-        this->addChild(BarrierGroup::create());
-    }
-   
-    this->schedule(schedule_selector(SectorLayer::scheduleFunc));
-    return SectorLayerFather::init();
-}
-
-void SectorLayer::draw()
-{
-    GameScene::sharedInstance()->movedLength += 0.003;
 }
 
 
@@ -187,6 +178,7 @@ Barrier::Barrier(float innerRadius,float outerRadius,int start,int end)
 bool Barrier::init()
 {
     this->setRotation(-_parameter.start*60);
+    _isDisappear = false;
     return BarrierFather::init();
 }
 
@@ -205,6 +197,8 @@ bool Barrier::detactCollision()
     float innerR,outerR;
     innerR = _parameter.innerR - GameScene::sharedInstance()->movedLength;
     outerR = _parameter.outerR - GameScene::sharedInstance()->movedLength;
+    if(innerR < 0.1)
+        innerR = 0.1;
     Sprite* s = GameScene::sharedInstance()->getSprite();
     CCSize size = CCDirector::sharedDirector()->getWinSize();
     if( s->getRadius() >= outerR*size.width/2 || s->getRadius() + s->getHeight() <= innerR*size.width/2 )
@@ -215,25 +209,39 @@ bool Barrier::detactCollision()
     return false;
 }
 
+void Barrier::disappear()
+{
+    BarrierGroup* parent = (BarrierGroup*)this->getParent();
+    parent->decreaseLiveChildrenCount();
+    _isDisappear = true;
+}
+
 void Barrier::draw()
 {
+    if(_isDisappear) return;
+    
     float innerR,outerR;
     innerR = _parameter.innerR - GameScene::sharedInstance()->movedLength;
     outerR = _parameter.outerR - GameScene::sharedInstance()->movedLength;
+    if(outerR <= 0.1)
+    {
+        //这句话可能造成屏幕闪烁 
+        //this->removeFromParent();
+        
+        //使用disappear()函数防止屏幕卡顿
+        disappear();
+        return;
+    }
     if(innerR > 0.1)
     {
+        
         CCSize size = CCDirector::sharedDirector()->getWinSize();
         ccDrawColor4B(146, 10, 36, 255);
         ccDrawAnnulus(ccp(0,0), innerR*size.width/2, outerR*size.width/2, CC_DEGREES_TO_RADIANS((_parameter.end-_parameter.start)*60), 20);
-        if(detactCollision())
-        {
-            //GameScene::sharedInstance()->gameOver();
-        }
-        //在这里做碰撞检测
-        
     }
     else if(outerR > 0.1)
     {
+        innerR = 0.1;
         CCSize size = CCDirector::sharedDirector()->getWinSize();
         if(_parameter.outerR > _parameter.innerR)
         {
@@ -241,11 +249,11 @@ void Barrier::draw()
             ccDrawAnnulus(ccp(0,0), innerR*size.width/2, outerR*size.width/2, CC_DEGREES_TO_RADIANS((_parameter.end-_parameter.start)*60), 20);
         }
     }
-    else
+    //在这里做碰撞检测
+    if(detactCollision())
     {
-        this->removeFromParent();
+        GameScene::sharedInstance()->gameOver();
     }
-    BarrierFather::draw();
     //glLineWidth(_outerRadius-_innerRadius);效果不好
     //ccDrawArc(ccp(0,0), _innerRadius, CC_DEGREES_TO_RADIANS((_end-_start)*60), 100, false);
     //ccDrawArc(ccp(0,0), _outerRadius, CC_DEGREES_TO_RADIANS((_end-_start)*60), 100, false);
@@ -254,21 +262,24 @@ void Barrier::draw()
 
 BarrierGroup::BarrierGroup()
 {
+    _liveChildrenCount = 0;
     _paramList = GameScene::sharedInstance()->getGameStrategy()->getNextParamList();
     for (BarrierParamList::iterator itr = _paramList->begin(); itr != _paramList->end(); itr++) {
         this->addChild(Barrier::create(*itr));
+        _liveChildrenCount++;
     }
     BarrierGroupFather::BarrierGroupFather();
 }
 
 void BarrierGroup::draw()
 {
-    if(this->getChildrenCount() == 0)
+    if(_liveChildrenCount == 0)
     {
         this->removeAllChildren();
         _paramList = GameScene::sharedInstance()->getGameStrategy()->getNextParamList();
         for (BarrierParamList::iterator itr = _paramList->begin(); itr != _paramList->end(); itr++) {
             this->addChild(Barrier::create(*itr));
+            _liveChildrenCount++;
         }
     }
     BarrierGroupFather::draw();

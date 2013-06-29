@@ -22,6 +22,8 @@ class GameStrategy
 public:
     virtual void reset() = 0;
     virtual BarrierParamList* getNextParamList() = 0;
+    virtual float getNextRandomTime() = 0;
+    virtual float getNextRandomSpeed() = 0;
     //virtual BarrierGroup* createBarrierGroup() = 0;
 };
 
@@ -33,6 +35,8 @@ private:
 public:
     virtual void reset();
     virtual BarrierParamList* getNextParamList();
+    virtual float getNextRandomTime();
+    virtual float getNextRandomSpeed();
     //virtual BarrierGroup* createBarrierGroup();
 };
 

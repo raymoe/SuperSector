@@ -40,7 +40,6 @@ public:
     //Sprite();
     virtual bool init();
     virtual void draw();
-    virtual void updateTransform();
     virtual void onEnter();
     virtual bool ccTouchBegan(CCTouch* touch, CCEvent* event);
     virtual void ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent);
@@ -54,7 +53,6 @@ class SectorScene : public CCScene
 private:
     CCTimer timer;
 public:
-    void setLevel(int level);
     virtual bool init();
     virtual void draw();
     CREATE_FUNC(SectorScene);
@@ -79,14 +77,36 @@ struct BarrierParam
     int end;
 };
 
-typedef std::vector<BarrierParam> BarrierParamList;
+class BarrierParamList : public std::vector<BarrierParam>
+{
+public:
+    float movedLength;
+};
+
+//typedef std::vector<BarrierParam> BarrierParamList;
 typedef std::vector<BarrierParamList> BarrierParamLists;
+
+
+//对于游戏节奏的控制有一些帮助作用
+class BarrierGroup : public BarrierGroupFather
+{
+private:
+    BarrierParamList* _paramList;
+    int _liveChildrenCount;
+public:
+    BarrierGroup();
+    //virtual bool init();
+    virtual void draw();
+    inline void decreaseLiveChildrenCount(){_liveChildrenCount--;}
+    CREATE_FUNC(BarrierGroup);
+};
 
 class Barrier : public BarrierFather {
 private:
+    BarrierGroup* _parent;
     BarrierParam _parameter;
     ccColor4B _color;
-    
+    bool _isDisappear;
 public:
     Barrier();
     Barrier(BarrierParam parameter);
@@ -94,6 +114,7 @@ public:
     virtual bool init();
     virtual void draw();
     bool detactCollision();
+    void disappear();
     static Barrier* create()
     {
         Barrier *pRet = new Barrier();
@@ -129,17 +150,7 @@ public:
 
 
 
-//对于游戏节奏的控制有一些帮助作用
-class BarrierGroup : public BarrierGroupFather
-{
-private:
-    BarrierParamList* _paramList;
-public:
-    BarrierGroup();
-    //virtual bool init();
-    virtual void draw();
-    CREATE_FUNC(BarrierGroup);
-};
+
 
 
 

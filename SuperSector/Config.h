@@ -14,16 +14,19 @@
 
 
 
-
+//关卡数据
 class LevelData
 {
 public:
     int level;
+    //场景随机旋转地最大旋转速度
+    float maxRotateSpeed;
     BarrierParamLists barrierParamLists;
 };
 
 typedef std::vector<LevelData> LevelDataList;
 
+//内容记录在ConfigAndData.xml中
 class ConfigAndData
 {
 public:

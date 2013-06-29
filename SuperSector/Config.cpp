@@ -20,6 +20,11 @@ void toBarrierParamList(xmlNodePtr node,BarrierParamList& list)
 {
     xmlNodePtr curChild;
     xmlAttrPtr attr;
+    attr = node->properties;
+    if(attr != NULL)
+        sscanf((const char*)xmlNodeGetContent((xmlNodePtr)attr),"%f",&list.movedLength);
+    else
+        list.movedLength = 0.6;
     for(curChild=node->children;curChild != NULL; curChild = curChild->next)
     {
         BarrierParam param;
@@ -38,7 +43,11 @@ void toBarrierParamList(xmlNodePtr node,BarrierParamList& list)
 
 void toLevelData(xmlNodePtr node,LevelData& data)
 {
-    sscanf((const char*)xmlNodeGetContent((xmlNodePtr)node->properties),"%d",&data.level);
+    xmlAttrPtr curAttr = node->properties;
+    sscanf((const char*)xmlNodeGetContent((xmlNodePtr)curAttr),"%d",&data.level);
+    curAttr = curAttr->next;
+    sscanf((const char*)xmlNodeGetContent((xmlNodePtr)curAttr),"%f",&data.maxRotateSpeed);
+    
     for(xmlNodePtr curChild = node->children->children; curChild != NULL; curChild = curChild->next)
     {
         BarrierParamList list;
